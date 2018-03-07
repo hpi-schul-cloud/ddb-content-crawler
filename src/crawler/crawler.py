@@ -25,8 +25,8 @@ class Crawler:
         for child in feed:
             resource_dict = self.parse(child)
             resource = self.validate(resource_dict)
-            # if resource:
-            #    self.target_api.add_resource(resource)
+            if resource:
+                self.target_api.add_resource(resource)
 
     def parse(self, element: dict) -> dict:
         target_dict = {}
