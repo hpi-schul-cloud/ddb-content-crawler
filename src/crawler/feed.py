@@ -14,13 +14,27 @@ class SourceFeed(ABC):
 
 
 class DeutscheDigitaleBibliothekFeed(SourceFeed):
-    # todo query params "offset = 21 & rows = 2 & sort
-    # todo only digitized?
+    @property
+    def offset(self):
+        return self.page * self.page_size
+
+    page_size = 10
+
+    def __init__(self):
+        self.page = 0
+        self.max_result = 9999999999
+
     # https: // api.deutsche - digitale - bibliothek.de / doku / display / ADD / search  # search-Request4
     # https: // api.deutsche - digitale - bibliothek.de / doku / display / ADD / Medientyp
     def get_feed(self) -> dict:
-        r = requests.get(self.base_url, headers=self.headers)
-        return r.json()['results']
+        while self.offset <= self.max_result:
+            r = requests.get(self.base_url, params={'offset': self.offset, 'rows': self.page_size},
+                             headers=self.headers)
+            self.page += 1
+            response_dict = r.json()
+            self.max_result = response_dict['numberOfResults']
+            for item in response_dict['results'][0]['docs']:
+                yield item
 
     @property
     def headers(self):
@@ -37,4 +51,3 @@ class LocalJsonFeed(SourceFeed):
         with open(self.base_url, mode="r", encoding="utf-8") as f:
             content = json.load(f)
         return content['results'][0]['docs']
-

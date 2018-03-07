@@ -42,6 +42,7 @@ class Crawler:
                     raise MappingException('mapping for key{} is invalid')
             except KeyError:
                 print('no match for key {} on element {}'.format(key, element['id'], element['title']))
+        print (target_dict)
         return target_dict
 
     def validate(self, resource_dict):
@@ -73,7 +74,7 @@ def get_description(_, item):
 
 class DeutscheDigitaleBibliothekCrawler(Crawler):
     provider_name = "Deutsche Digitale Bibliothek"
-    source_api = LocalJsonFeed  # DeutscheDigitaleBibliothekFeed
+    source_api = DeutscheDigitaleBibliothekFeed
 
     target_to_source_mapping = {
         "title": "title",
