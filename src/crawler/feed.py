@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 import requests
 import json
 import settings
+from exceptions import ConfigurationError
 
 
 class SourceFeed(ABC):
@@ -23,18 +24,25 @@ class DeutscheDigitaleBibliothekFeed(SourceFeed):
     def __init__(self):
         self.page = 0
         self.max_result = 9999999999
+        if not settings.API_KEY:
+            raise EnvironmentError('There is no API_KEY DEFINED in the Environment')
 
-    # https: // api.deutsche - digitale - bibliothek.de / doku / display / ADD / search  # search-Request4
-    # https: // api.deutsche - digitale - bibliothek.de / doku / display / ADD / Medientyp
+    # https://api.deutsche-digitale-bibliothek.de/doku/display/ADD/search#search-Request4
+    # https://api.deutsche-digitale-bibliothek.de/doku/display/ADD/Medientyp
     def get_feed(self) -> dict:
         while self.offset <= self.max_result:
             r = requests.get(self.base_url, params={'offset': self.offset, 'rows': self.page_size},
                              headers=self.headers)
-            self.page += 1
-            response_dict = r.json()
-            self.max_result = response_dict['numberOfResults']
-            for item in response_dict['results'][0]['docs']:
-                yield item
+            if r.ok:
+                self.page += 1
+
+                response_dict = r.json()
+                print(response_dict)
+                self.max_result = response_dict['numberOfResults']
+                for item in response_dict['results'][0]['docs']:
+                    yield item
+            else:
+                raise ConnectionRefusedError('The Feed could not be established: status:{} {}'.format(r.status_code, r.content))
 
     @property
     def headers(self):

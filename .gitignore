@@ -1,5 +1,4 @@
 .env
-data/*.xml
 data/*.json
 local.env
 venv

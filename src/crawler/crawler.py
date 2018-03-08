@@ -1,9 +1,9 @@
 import logging
 from jsonschema import ValidationError
 
-from crawler.exceptions import MappingException
+from exceptions import MappingException
 from crawler.feed import DeutscheDigitaleBibliothekFeed, LocalJsonFeed
-from api import ResourceSchema, ResourceAPI
+from schema import ResourceSchema, ResourceAPI
 from crawler.mappings import Mapping
 
 
@@ -42,7 +42,7 @@ class Crawler:
                     raise MappingException('mapping for key{} is invalid')
             except KeyError:
                 print('no match for key {} on element {}'.format(key, element['id'], element['title']))
-        print (target_dict)
+        print(target_dict)
         return target_dict
 
     def validate(self, resource_dict):
@@ -50,7 +50,7 @@ class Crawler:
         try:
             self.target_api.validate(target_format)
         except ValidationError as e:
-            # self.log(e)
+            self.log(e)
             return None
         return target_format
 
@@ -62,8 +62,8 @@ def get_item_url(_, item):
     return "{}/item/{}".format(base_url, item['id'])
 
 
-def get_thumbnail(key, item):
-    if hasattr(item,key):
+def build_url_from_key(key, item):
+    if key in item:
         return "{}/{}".format(base_url, item[key])
     return ''
 
@@ -81,10 +81,10 @@ class DeutscheDigitaleBibliothekCrawler(Crawler):
         "url": Mapping("id", get_item_url),
         "originId": "id",
         "description": Mapping("beschreibung", get_description),
-        #"licenses": None,  # "Mapping("rechte", lambda m: [w.text for w in m]),
+        # "licenses": None,  # "Mapping("rechte", lambda m: [w.text for w in m]),
         "mimeType": "media",
-        #"contentCategory": None,
+        # "contentCategory": None,
         "tags": "category",  # lambda m,_: [w.strip() for w in m[0].text.split(';')]),
-        "thumbnail": Mapping("thumbnail", get_thumbnail),
-        #"providerName": None,
+        "thumbnail": Mapping("thumbnail", build_url_from_key),
+        # "providerName": None,
     }
