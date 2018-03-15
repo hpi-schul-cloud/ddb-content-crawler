@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+
+  deutsche-digitale-crawler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - schulcloudserver_schulcloud-server-network
+    external_links:
+      - schulcloudcontent_schulcloud-content_1:api
+    env_file:
+      - default.env
+      - local.env
+
+networks:
+  schulcloudserver_schulcloud-server-network:
+    external: true
+

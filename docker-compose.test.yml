@@ -1,0 +1,14 @@
+version: '3'
+# TODO IS THIS STILL WORKING?
+services:
+  bildungsserver-content-crawler:
+    depends_on:
+      - resource-api-server
+    environment:
+      TARGET_URL: http://resource-api-server:4040/resources
+
+  resource-api-server:
+    image: schulcloud/schul_cloud_resources_server_tests
+    ports:
+    - "80:8080"
+
