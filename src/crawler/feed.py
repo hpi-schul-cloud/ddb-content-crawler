@@ -24,8 +24,7 @@ class DeutscheDigitaleBibliothekFeed(SourceFeed):
     def __init__(self):
         self.page = 0
         self.max_result = 9999999999
-        if not settings.API_KEY:
-            raise EnvironmentError('There is no API_KEY DEFINED in the Environment')
+
 
     # https://api.deutsche-digitale-bibliothek.de/doku/display/ADD/search#search-Request4
     # https://api.deutsche-digitale-bibliothek.de/doku/display/ADD/Medientyp
