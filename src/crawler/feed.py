@@ -19,12 +19,15 @@ def get_media_url(type_id):
     return 'https://api.deutsche-digitale-bibliothek.de/search?query=*&facet=type_fct&type_fct=mediatype_00{}'.format(
         type_id)
 
+
 def get_sparte_url(type_id):
     return 'https://api.deutsche-digitale-bibliothek.de/search?query=*&facet=type_fct&type_fct=mediatype_00{}'.format(
         type_id)
 
+
 def get_item_details(item_id):
     return 'https://api.deutsche-digitale-bibliothek.de/{id}/UPKFBXUQ6LUL6SMYNV4JBQZN7I3CR74T/view'.format(id=item_id)
+
 
 class DeutscheDigitaleBibliothekFeed(SourceFeed):
     @property
@@ -45,7 +48,7 @@ class DeutscheDigitaleBibliothekFeed(SourceFeed):
             response_dict = r.json()
             print('all %i' % (response_dict['numberOfResults'],))
         acc = 0
-        for i in range( 10):
+        for i in range(10):
             r = requests.get(get_media_url(i), params={'rows': 1},
                              headers=self.headers)
             if r.ok:
@@ -71,7 +74,7 @@ class DeutscheDigitaleBibliothekFeed(SourceFeed):
                 print(response_dict)
                 self.max_result = response_dict['numberOfResults']
                 for item in response_dict['results'][0]['docs']:
-                    #todo schedule item ids
+                    # todo schedule item ids
                     yield item
             else:
                 raise ConnectionRefusedError(
