@@ -25,8 +25,12 @@ def get_sparte_url(type_id):
         type_id)
 
 
-def get_item_details(item_id):
-    return 'https://api.deutsche-digitale-bibliothek.de/{id}/UPKFBXUQ6LUL6SMYNV4JBQZN7I3CR74T/view'.format(id=item_id)
+def get_item_view(item_id):
+    return 'https://api.deutsche-digitale-bibliothek.de/items/{id}/view'.format(id=item_id)
+
+
+def get_item_edm(item_id):
+    return 'https://api.deutsche-digitale-bibliothek.de/items/{id}/edm'.format(id=item_id)
 
 
 class DeutscheDigitaleBibliothekFeed(SourceFeed):

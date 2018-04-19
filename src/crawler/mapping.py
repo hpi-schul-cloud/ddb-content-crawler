@@ -1,4 +1,5 @@
 from exceptions import MappingException
+
 base_url = "https://www.deutsche-digitale-bibliothek.de"
 
 
@@ -21,9 +22,15 @@ def default_transform(key, item):
 
 
 class Mapping:
-    def __init__(self, name: str, transform: default_transform) -> None:
+    def __init__(self, name: str, transform=default_transform) -> None:
         self.name = name
         self.transform = transform
+
+
+class StaticMapping(Mapping):
+    def __init__(self, name: str, transform=default_transform) -> None:
+        super().__init__(name)
+        self.transform = lambda *_: name
 
 
 class Mapper:
@@ -42,7 +49,7 @@ class Mapper:
                 else:
                     raise MappingException('mapping for key{} is invalid')
             except KeyError:
-                print('no match for key {} on element {}'.format(key, element['id'], element['title']))
+                print('no match for key {} on element {}'.format(key, element))
         return target_dict
 
 
@@ -54,7 +61,7 @@ class DDBSchulCloudMapper(Mapper):
         "description": Mapping("beschreibung", get_description),
         # "licenses": None,  # "Mapping("rechte", lambda m: [w.text for w in m]),
         "mimeType": "media",
-        "contentCategory": None,
+        "contentCategory": StaticMapping('atomic'),
         "tags": "category",  # lambda m,_: [w.strip() for w in m[0].text.split(';')]),
         "thumbnail": Mapping("thumbnail", build_url_from_key),
     }
