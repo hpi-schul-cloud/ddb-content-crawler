@@ -1,7 +1,7 @@
 version: '3'
 # TODO IS THIS STILL WORKING?
 services:
-  bildungsserver-content-crawler:
+  deutsche-digitale-crawler:
     depends_on:
       - resource-api-server
     environment:

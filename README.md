@@ -1,13 +1,19 @@
 ## Usage
 
-- For local development, start https://github.com/schul-cloud/schul_ on localhost. 
+- For local development, start https://github.com/schul-cloud/schulcloud-content on localhost.
 - Run `src/app.py`
 
-### Configuration 
-Configuration uses environment variables found in `src/settings.py`.
+### Configuration
+
+Configuration uses environment variables that are parsed in `src/settings.py`.
 For docker you can use `local.env` to overwrite the environment variables. `local.env` is ignored by `git`.
 For local usage, no configuration should be necessary.
+An Api Key for Deutsche Digitale Bibliothek is required for usage of the api
+(see local.env.example)
 
-## Run crawler and resource-api server in docker
+https://www.deutsche-digitale-bibliothek.de/user/registration
 
-`docker-compose -f docker-compose.yml -f docker-compose.test.yml up`
+
+## Run crawler  in docker context, connected to existing network : "schulcloudserver_schulcloud-server-network"
+
+`docker-compose up`
