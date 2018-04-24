@@ -46,7 +46,7 @@ class ResourceAPI:
 
 class ResourceSchema(dict):
     mime_type = 'text/html'
-    content_category = 'learning-object'
+    content_category = 'atomic'
 
     def __init__(self, provider_name, **kwargs) -> None:
         super().__init__(**kwargs)

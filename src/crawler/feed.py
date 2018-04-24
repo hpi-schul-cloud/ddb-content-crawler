@@ -43,7 +43,8 @@ class DeutscheDigitaleBibliothekFeed(SourceFeed):
     def __init__(self):
         self.page = 0
         self.max_result = 9999999999
-        self.check_sizes()
+        if settings.DEBUG:
+            self.check_sizes()
 
     def check_sizes(self):
         r = requests.get(self.base_url, params={'rows': 1},
