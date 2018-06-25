@@ -9,4 +9,5 @@ SOURCE_LOCATION = os.getenv('JSON_LOCATION', 'https://api.deutsche-digitale-bibl
 TARGET_URL = os.getenv('TARGET_URL', 'http://localhost:4040/resources')
 BASIC_AUTH_USER = os.getenv('BASIC_AUTH_USER', 'schulcloud-content-1')
 BASIC_AUTH_PASSWORD = os.getenv('BASIC_AUTH_PASSWORD', 'content-1')
+DRY_RUN = True if os.getenv('DRY_RUN', None) is None else False
 

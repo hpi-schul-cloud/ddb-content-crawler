@@ -2,4 +2,5 @@
 data/*.json
 local.env
 venv
+.venv
 *.pyc

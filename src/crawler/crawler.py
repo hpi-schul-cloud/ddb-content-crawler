@@ -11,11 +11,12 @@ class Crawler:
     mapper = None
     source_api = None
 
-    def __init__(self, mapper: Mapper, target_api=ResourceAPI) -> None:
+    def __init__(self, mapper: Mapper, target_api=ResourceAPI, dry_run: bool=False) -> None:
         self.logger = logging.getLogger(self.provider_name)
         self.source_api = self.source_api()
         self.mapper = mapper
         self.target_api = target_api()
+        self.dry_run = dry_run
 
     def log(self, message):
         self.logger.error(message)
@@ -25,8 +26,10 @@ class Crawler:
         for child in feed:
             resource_dict = self.parse(child)
             resource = self.validate(resource_dict)
-            if resource:
+            if resource and not self.dry_run:
                 self.target_api.add_resource(resource)
+            elif resource:
+                self.log(resource)
 
     def parse(self, element: dict) -> dict:
         return self.mapper.map_source_to_target(element)
@@ -45,5 +48,5 @@ class DeutscheDigitaleBibliothekCrawler(Crawler):
     provider_name = "Deutsche Digitale Bibliothek"
     source_api = DeutscheDigitaleBibliothekFeed
 
-    def __init__(self):
-        super().__init__(DDBSchulCloudMapper())
+    def __init__(self, *args, **kwargs):
+        super().__init__(DDBSchulCloudMapper(), *args, **kwargs)
